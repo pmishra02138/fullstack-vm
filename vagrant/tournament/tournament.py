@@ -27,7 +27,7 @@ def deletePlayers():
     """Remove all the player records from the database."""
     db = connect()
     c = db.cursor()
-    c.execute("DELETE FROM record")    
+    c.execute("DELETE FROM record")
     c.execute("DELETE FROM players")
     db.commit()
     db.close()
@@ -77,23 +77,13 @@ def playerStandings():
     """
     db = connect()
     c = db.cursor()
-    c.execute("SELECT (players.id, players.name, record.wins, record.matches) \
+    c.execute("SELECT players.id, players.name, record.wins, record.matches \
                     FROM players, record WHERE players.id = record.id  \
                     ORDER BY wins DESC;")
     standings = c.fetchall()
     db.close()
 
-    # Process output to a list of tuple form
-    output = []
-    for standing in standings:
-        s = standing[0][1:-1].split(",")
-        s[0] = int(s[0])
-        s[1] = s[1][1:-1]
-        s[2] = int(s[2])
-        s[3] = int(s[3])
-        output.append(tuple(s))
-
-    return output
+    return standings
 
 
 def reportMatch(winner, loser):
