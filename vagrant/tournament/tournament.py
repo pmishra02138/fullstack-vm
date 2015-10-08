@@ -120,6 +120,12 @@ def swissPairings():
     pair = []
     jmp = 0
 
+    # Check if the count is an even number
+    try:
+        (count % 2) == 0
+    except ValueError:
+        print "There should be an even number of players"
+
     for i in range(0, count/2):
         pair.append(tuple([s[i+jmp][0], s[i+jmp][1], s[i+1+jmp][0], s[i+1+jmp][1]]))
         jmp = jmp + 1
