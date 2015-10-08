@@ -5,19 +5,20 @@
 
 import psycopg2
 
-def connect():
+def connect(database_name="tournament"):
     """Connect to the PostgreSQL database.  Returns a database connection."""
     try:
-        db = psycopg2.connect("dbname=tournament")
+        db = psycopg2.connect("dbname={}".format(database_name))
+        cursor = db.cursor()
+        return db, cursor
     except:
         print "I am unable to connect"
-    return db
+
 
 
 def deleteMatches():
     """Remove all the match records from the database."""
-    db = connect()
-    c = db.cursor()
+    db, c  = connect()
     c.execute("DELETE FROM record")
     db.commit()
     db.close()
@@ -25,8 +26,7 @@ def deleteMatches():
 
 def deletePlayers():
     """Remove all the player records from the database."""
-    db = connect()
-    c = db.cursor()
+    db, c  = connect()
     c.execute("DELETE FROM record")
     c.execute("DELETE FROM players")
     db.commit()
@@ -35,8 +35,7 @@ def deletePlayers():
 
 def countPlayers():
     """Returns the number of players currently registered."""
-    db = connect()
-    c = db.cursor()
+    db, c  = connect()
     c.execute("SELECT COUNT(*) FROM players")
     count = c.fetchall()
     db.close()
@@ -52,8 +51,7 @@ def registerPlayer(pname):
     Args:
       name: the player's full name (need not be unique).
     """
-    db = connect()
-    c = db.cursor()
+    db, c  = connect()
     c.execute("INSERT INTO players (name) VALUES (%s)", (pname,))
     c.execute("SELECT id FROM players WHERE name LIKE (%s)", (pname,))
     id_num = c.fetchall()
@@ -75,8 +73,7 @@ def playerStandings():
         wins: the number of matches the player has won
         matches: the number of matches the player has played
     """
-    db = connect()
-    c = db.cursor()
+    db, c  = connect()
     c.execute("SELECT players.id, players.name, record.wins, record.matches \
                     FROM players, record WHERE players.id = record.id  \
                     ORDER BY wins DESC;")
@@ -93,8 +90,7 @@ def reportMatch(winner, loser):
       winner:  the id number of the player who won
       loser:  the id number of the player who lost
     """
-    db = connect()
-    c = db.cursor()
+    db, c  = connect()
 
     c.execute("UPDATE record SET wins = wins +1, matches = matches+1 \
                 WHERE id=%s", (winner,))
