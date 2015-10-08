@@ -37,10 +37,10 @@ def countPlayers():
     """Returns the number of players currently registered."""
     db, c  = connect()
     c.execute("SELECT COUNT(*) FROM players")
-    count = c.fetchall()
+    count = c.fetchone()
     db.close()
 
-    return count[0][0]
+    return count[0]
 
 def registerPlayer(pname):
     """Adds a player to the tournament database.
@@ -119,6 +119,7 @@ def swissPairings():
     count = countPlayers()
     pair = []
     jmp = 0
+
     for i in range(0, count/2):
         pair.append(tuple([s[i+jmp][0], s[i+jmp][1], s[i+1+jmp][0], s[i+1+jmp][1]]))
         jmp = jmp + 1
