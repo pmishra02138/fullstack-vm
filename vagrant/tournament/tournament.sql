@@ -10,12 +10,8 @@ DROP DATABASE IF EXISTS tournament;
 CREATE DATABASE tournament;
 \c tournament
 
-CREATE TABLE players ( name TEXT,
-                       id SERIAL PRIMARY KEY
+CREATE TABLE players ( name TEXT NOT NULL,
+                       id SERIAL PRIMARY KEY,
+                       wins INTEGER,
+                       matches INTEGER
                      );
-
--- What is the impact of SERIAL ID to INTEGER ID
-CREATE TABLE record ( id SERIAL REFERENCES players(id),
-                      wins INTEGER,
-                      matches INTEGER
-                    );
