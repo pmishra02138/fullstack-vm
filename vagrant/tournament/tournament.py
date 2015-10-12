@@ -15,11 +15,10 @@ def connect(database_name="tournament"):
         print "I am unable to connect"
 
 
-
 def deleteMatches():
     """Remove all the match records from the database."""
     db, c  = connect()
-    c.execute("DELETE FROM record")
+    c.execute("UPDATE players SET wins = 0, matches = 0")
     db.commit()
     db.close()
 
@@ -27,7 +26,6 @@ def deleteMatches():
 def deletePlayers():
     """Remove all the player records from the database."""
     db, c  = connect()
-    c.execute("DELETE FROM record")
     c.execute("DELETE FROM players")
     db.commit()
     db.close()
@@ -52,10 +50,7 @@ def registerPlayer(pname):
       name: the player's full name (need not be unique).
     """
     db, c  = connect()
-    c.execute("INSERT INTO players (name) VALUES (%s)", (pname,))
-    c.execute("SELECT id FROM players WHERE name LIKE (%s)", (pname,))
-    id_num = c.fetchall()
-    c.execute("INSERT INTO record VALUES (%s, %s, %s)", (id_num[0][0], 0, 0,))
+    c.execute("INSERT INTO players (name, wins, matches) VALUES (%s, %s, %s)", (pname, 0, 0,))
     db.commit()
     db.close()
 
@@ -74,9 +69,8 @@ def playerStandings():
         matches: the number of matches the player has played
     """
     db, c  = connect()
-    c.execute("SELECT players.id, players.name, record.wins, record.matches \
-                    FROM players, record WHERE players.id = record.id  \
-                    ORDER BY wins DESC;")
+    c.execute("SELECT id, name, wins, matches \
+                    FROM players ORDER BY wins DESC;")
     standings = c.fetchall()
     db.close()
 
@@ -92,9 +86,9 @@ def reportMatch(winner, loser):
     """
     db, c  = connect()
 
-    c.execute("UPDATE record SET wins = wins +1, matches = matches+1 \
+    c.execute("UPDATE players SET wins = wins +1, matches = matches+1 \
                 WHERE id=%s", (winner,))
-    c.execute("UPDATE record SET matches = matches+1 WHERE id=%s", (loser,))
+    c.execute("UPDATE players SET matches = matches+1 WHERE id=%s", (loser,))
     db.commit()
     db.close()
 
