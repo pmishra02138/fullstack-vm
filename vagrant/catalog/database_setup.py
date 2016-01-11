@@ -19,8 +19,8 @@ class Movie(Base):
     id = Column(Integer, primary_key=True)
     description = Column(String(250))
     releaseDate = Column(Date)
-    restaurant_id = Column(Integer, ForeignKey('category.id'))
-    restaurant = relationship(Category)
+    movie_id = Column(Integer, ForeignKey('category.id'))
+    movie = relationship(Category)
 
 
 engine = create_engine('sqlite:///moviecatalog.db')
