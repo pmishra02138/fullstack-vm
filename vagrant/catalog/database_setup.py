@@ -21,3 +21,9 @@ class Movie(Base):
     releaseDate = Column(Date)
     restaurant_id = Column(Integer, ForeignKey('category.id'))
     restaurant = relationship(Category)
+
+
+engine = create_engine('sqlite:///moviecatalog.db')
+
+
+Base.metadata.create_all(engine)
