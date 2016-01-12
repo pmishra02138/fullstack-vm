@@ -1,31 +1,33 @@
 from flask import Flask, render_template, url_for, request
+
+
+from sqlalchemy import create_engine, asc
+from sqlalchemy.orm import sessionmaker
+from database_setup import Base, Category, Movie
+
+
 app = Flask(__name__)
 
 
-# Fake Categories
-category = {'name': 'Action', 'id': '1'}
-categories = [{'name':'Action', 'id': '1'}, {'name':'Comedies', 'id': '2'}, {'name':'Drama', 'id': '3'},
- {'name':'Romance', 'id': '4'}, {'name':'Horror', 'id': '5'}]
+# Connect to Database and create database session
+engine = create_engine('sqlite:///moviecatalog.db')
+Base.metadata.bind = engine
 
-#Fake Menu Items
-movies = [ {'name':'Survivor', 'description':'made with fresh cheese', 'price':'$5.99','course' :'Entree', 'id':'1'},
-{'name':'Chocolate Cake','description':'made with Dutch Chocolate', 'price':'$3.99', 'course':'Dessert','id':'2'},
-{'name':'Caesar Salad', 'description':'with fresh organic vegetables','price':'$5.99', 'course':'Entree','id':'3'},
-{'name':'Iced Tea', 'description':'with lemon','price':'$.99', 'course':'Beverage','id':'4'},
-{'name':'Spinach Dip', 'description':'creamy dip with fresh spinach','price':'$1.99', 'course':'Appetizer','id':'5'} ]
-movie =  {'name':'Surviovr','description':'A Foreign Service Officer in London tries to prevent a terrorist attack set to hit New York, but is forced to go on the run when she is framed for crimes she did not commit.'}
+DBSession = sessionmaker(bind=engine)
+session = DBSession()
 
 
 @app.route('/')
 @app.route('/categories')
 def showCategories():
-    # return "This page will show all movie categories."
+    categories = session.query(Category).all()
     return render_template('categories.html', categories=categories)
 
 
 @app.route('/category/<int:category_id>/movies')
 def showCategory(category_id):
-    # return "This page will show all movies in category: %d " % (category_id, )
+    categories = session.query(Category).all()
+    
     return render_template('category.html', categories=categories,
                             category_id = category_id, movie = movies[category_id-1])
 
