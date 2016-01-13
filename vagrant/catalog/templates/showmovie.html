@@ -3,11 +3,11 @@
 <body>
 
 <h2>{{movie['name'] }}</h2>
-<p>Descritption: {{movie['description'] }}</p>
+<p>{{movie['description'] }}</p>
 
 <div>
-  <a href='{{url_for('editMovie', category_id = category_id, movie_id = movie_id)}}'> Edit </a>
-  <a href='{{url_for('deleteMovie', category_id = category_id, movie_id = movie_id)}}'> Delete </a>
+  <a href='{{url_for('editMovie', category_id = movie.category_id, movie_id = movie.id)}}'> Edit </a>
+  <a href='{{url_for('deleteMovie', category_id = movie.category_id, movie_id = movie.id)}}'> Delete </a>
 </div>
 
 </body>

@@ -8,19 +8,23 @@
 
   <h1>Catalog App</h1>
 
-  {% for category in categories %}
+  <div style="float: left; width: 50%;">
+    <ul>
+    {% for category in categories %}
+    <br/>
+      <ul><a href='{{url_for('showCategory', category_id = category.id)}}'> {{category.name}} </a></ul>
 
-  <div class="col-2">
-    <div>
-      <a href='{{url_for('showCategory', category_id = category.id)}}'>{{category.name}}</a>
-    </div>
-    <div>
-      <p> Section 2 </p>
-    </div>
+    {% endfor %}
+    </ul>
+  </div>
+  <div style="float: right; width: 50%;">
+    <ul>
+      {% for movie in movies %}
+      <ul><a href='{{url_for('showMovie', category_id = movie.category_id, movie_id = movie.id)}}'> {{movie.name}} </a> </ul>
+      {% endfor %}
+    </ul>
   </div>
 
-
-  {% endfor %}
 </body>
 
 </html>

@@ -21,20 +21,20 @@ session = DBSession()
 @app.route('/categories')
 def showCategories():
     categories = session.query(Category).all()
-    return render_template('categories.html', categories=categories)
+    movies =  session.query(Movie).order_by(asc(Movie.releaseDate)).limit(5).all()
+    return render_template('categories.html', categories=categories, movies=movies)
 
 
 @app.route('/category/<int:category_id>/movies')
 def showCategory(category_id):
     categories = session.query(Category).all()
-    
+    movies =  session.query(Movie).filter(Movie.category_id == category_id).all()
     return render_template('category.html', categories=categories,
-                            category_id = category_id, movie = movies[category_id-1])
+                            category_id = category_id, movies=movies)
 
 
 @app.route('/category/<int:category_id>/movie/new', methods=['GET', 'POST'])
 def newMovie(category_id):
-    # return "This page will create a new movie in category: %d" % (category_id, )
     if request.method == 'POST':
         pass
     else:
@@ -43,34 +43,31 @@ def newMovie(category_id):
 
 @app.route('/category/<int:category_id>/movie/<int:movie_id>/edit', methods=['GET', 'POST'])
 def editMovie(category_id, movie_id):
-    # return "This page will edit movie: %d in category: %d" % (movie_id, category_id)
+    editedMovie = session.query(Movie).filter(Movie.id == movie_id).one()
     if request.method == 'POST':
         pass
     else:
-        return render_template('editmovie.html', categories=categories,
-                                category_id = category_id, movie_id = movie_id,
-                                movie = movies[category_id])
+        return render_template('editmovie.html', category_id = category_id,
+                                movie_id = movie_id, movie = editedMovie)
 
 
 @app.route('/category/<int:category_id>/movie/<int:movie_id>/delete', methods=['GET', 'POST'])
 def deleteMovie(category_id, movie_id):
-    # return "This page will delete movie: %d in category: %d" % (movie_id, category_id)
+    deletedMovie = session.query(Movie).filter(Movie.id == movie_id).one()
     if request.method == 'POST':
         pass
     else:
-        return render_template('deletemovie.html', categories=categories,
-                                category_id = category_id, movie_id = movie_id,
-                                movie = movies[category_id])
+        return render_template('deletemovie.html', category_id = category_id,
+                                movie_id = movie_id, movie = deletedMovie)
 
 
 @app.route('/category/<int:category_id>/movie/<int:movie_id>', methods=['GET', 'POST'])
 def showMovie(category_id, movie_id):
-    # return "This page will show descritption of movie: %d in category: %d" % (movie_id, category_id)
+    movie =  session.query(Movie).filter(Movie.category_id == category_id, Movie.id == movie_id).one()
     if request.method == 'POST':
         pass
     else:
-        return render_template('showmovie.html', category_id = category_id,
-                                movie_id = movie_id, movie = movies[category_id])
+        return render_template('showmovie.html', movie = movie)
 
 
 if __name__ == '__main__':

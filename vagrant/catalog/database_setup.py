@@ -19,7 +19,7 @@ class Movie(Base):
     id = Column(Integer, primary_key=True)
     description = Column(String(250))
     releaseDate = Column(Date)
-    movie_id = Column(Integer, ForeignKey('category.id'))
+    category_id = Column(Integer, ForeignKey('category.id'))
     movie = relationship(Category)
 
 

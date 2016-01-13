@@ -21,7 +21,7 @@ for category in categories:
 	session.add(new_category)
 	session.commit()
 
-# Print Catalog table
+# # Print Catalog table
 # for category in session.query(Category):
 # 	print category.name, category.id
 
@@ -40,12 +40,12 @@ movies = [{'name':'Surviovr', 'category':'Action', 'releaseDate':datetime.date(2
 for movie in movies:
 	movieCategory = session.query(Category).filter(Category.name== movie['category']).one()
 	new_movie = Movie(name = movie['name'], releaseDate = movie['releaseDate'],
-						description = movie['description'], movie_id = movieCategory.id)
+						description = movie['description'], category_id = movieCategory.id)
 	session.add(new_movie)
 	session.commit()
 
 # Print Movie table
-# for movie in session.query(Movie):
-# 	print movie.name, movie.id, movie.movie_id, movie.releaseDate, movie.description
+for movie in session.query(Movie):
+	print movie.name, movie.id, movie.category_id, movie.releaseDate, movie.description
 
 print "Successfully created Catalog database containing movies by generes!"
