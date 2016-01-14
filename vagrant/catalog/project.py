@@ -80,13 +80,10 @@ def deleteMovie(category_id, movie_id):
                                 movie_id = movie_id, movie = deletedMovie)
 
 
-@app.route('/category/<int:category_id>/movie/<int:movie_id>', methods=['GET', 'POST'])
+@app.route('/category/<int:category_id>/movie/<int:movie_id>')
 def showMovie(category_id, movie_id):
     movie =  session.query(Movie).filter(Movie.category_id == category_id, Movie.id == movie_id).one()
-    if request.method == 'POST':
-        pass
-    else:
-        return render_template('showmovie.html', movie = movie)
+    return render_template('showmovie.html', movie = movie)
 
 
 if __name__ == '__main__':
