@@ -73,7 +73,9 @@ def editMovie(category_id, movie_id):
 def deleteMovie(category_id, movie_id):
     deletedMovie = session.query(Movie).filter(Movie.id == movie_id).one()
     if request.method == 'POST':
-        pass
+        session.delete(deletedMovie)
+        session.commit()
+        return redirect(url_for('showCategory', category_id=category_id))
     else:
         return render_template('deletemovie.html', category_id = category_id,
                                 movie_id = movie_id, movie = deletedMovie)
