@@ -44,7 +44,7 @@ def newMovie(category_id):
         session.add(newMovie)
         session.commit()
         movies =  session.query(Movie).filter(Movie.category_id == category_id).all()
-        return redirect(url_for('showCategory', categories = categories, category_id=category_id, movies=movies))
+        return redirect(url_for('showCategory', category_id=category_id))
     else:
         return render_template('newmovie.html', category_id=category_id)
 
