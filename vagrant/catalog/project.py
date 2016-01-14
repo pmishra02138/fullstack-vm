@@ -62,7 +62,6 @@ def editMovie(category_id, movie_id):
             editedMovie.description = request.form['description']
         session.add(editedMovie)
         session.commit()
-        movies =  session.query(Movie).filter(Movie.category_id == category_id).all()
         return redirect(url_for('showCategory', category_id=category_id))
     else:
         return render_template('editmovie.html', category_id = category_id,
