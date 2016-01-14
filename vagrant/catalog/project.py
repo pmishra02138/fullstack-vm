@@ -1,4 +1,5 @@
-from flask import Flask, render_template, url_for, request
+from flask import Flask, render_template, url_for, request, redirect
+import datetime
 
 
 from sqlalchemy import create_engine, asc
@@ -35,8 +36,16 @@ def showCategory(category_id):
 
 @app.route('/category/<int:category_id>/movie/new', methods=['GET', 'POST'])
 def newMovie(category_id):
+    categories = session.query(Category).all()
     if request.method == 'POST':
-        pass
+        dt = request.form['releaseDate']
+        newMovie = Movie(name = request.form['name'], releaseDate = datetime.datetime.strptime(dt, "%Y-%m-%d"),
+    						description = request.form['description'], category_id = category_id)
+        session.add(newMovie)
+        session.commit()
+        movies =  session.query(Movie).filter(Movie.category_id == category_id).all()
+        return redirect(url_for('showCategory', categories = categories,
+                                    category_id=category_id, movies=movies))
     else:
         return render_template('newmovie.html', category_id=category_id)
 
