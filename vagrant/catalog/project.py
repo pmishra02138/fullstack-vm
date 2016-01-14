@@ -44,17 +44,26 @@ def newMovie(category_id):
         session.add(newMovie)
         session.commit()
         movies =  session.query(Movie).filter(Movie.category_id == category_id).all()
-        return redirect(url_for('showCategory', categories = categories,
-                                    category_id=category_id, movies=movies))
+        return redirect(url_for('showCategory', categories = categories, category_id=category_id, movies=movies))
     else:
         return render_template('newmovie.html', category_id=category_id)
 
 
 @app.route('/category/<int:category_id>/movie/<int:movie_id>/edit', methods=['GET', 'POST'])
 def editMovie(category_id, movie_id):
+    categories = session.query(Category).all()
     editedMovie = session.query(Movie).filter(Movie.id == movie_id).one()
     if request.method == 'POST':
-        pass
+        if request.form['name']:
+            editedMovie.name = request.form['name']
+        if request.form['releaseDate']:
+            editedMovie.releaseDate = datetime.datetime.strptime(request.form['releaseDate'], "%Y-%m-%d")
+        if request.form['description']:
+            editedMovie.description = request.form['description']
+        session.add(editedMovie)
+        session.commit()
+        movies =  session.query(Movie).filter(Movie.category_id == category_id).all()
+        return redirect(url_for('showCategory', category_id=category_id))
     else:
         return render_template('editmovie.html', category_id = category_id,
                                 movie_id = movie_id, movie = editedMovie)
