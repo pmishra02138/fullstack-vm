@@ -1,16 +1,16 @@
-<html>
+{% extends "main.html" %}
+{% block content %}
 
-<body>
-<h1> Are you sure you want to delete {{movie['name']}}? </h1>
+<div class="jumbotron">
+<p> Are you sure you want to delete {{movie['name']}}? </p>
+</div>
 
 <form action="{{url_for('deleteMovie', category_id = category_id, movie_id = movie_id)}}" method = 'post'>
-
-<input type='submit', value = 'Delete'>
-
+<div class="form-group">
+<button type="submit" class = "btn btn-danger" value="Delete">Delete</button>
+<a class= "btn btn-default" href= '{{url_for('showMovie', category_id = category_id, movie_id=movie_id)}}'>Cancel</a>
+</div>
 </form>
 
-<a href= '{{url_for('showMovie', category_id = category_id, movie_id=movie_id)}}'>Cancel</a>
 
-</body>
-
-</html>
+{% endblock %}

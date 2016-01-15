@@ -1,34 +1,23 @@
-<html>
-
-<head>
-  <link rel=stylesheet type=text/css href="{{ url_for('static', filename='styles.css') }}">
-</head>
-
-<body>
-
-  <h1>Catalog App</h1>
-
-  <div style="float: left; width: 50%;">
-    <ul>
+{% extends "main.html" %}
+{% block content %}
+<div class="row">
+  <div class="col-md-offset-1 col-md-4 ">
+    <h4 class="col-md-offset-1"> Movie Categories </h4>
     {% for category in categories %}
-    <br/>
-      <ul><a href='{{url_for('showCategory', category_id = category.id)}}'>
-        {{category.name}} </a></ul>
+      <ul><a href='{{url_for('showCategory', category_id = category.id)}}'> {{category.name}} </a></ul>
 
     {% endfor %}
-    </ul>
+
   </div>
-  <div style="float: right; width: 50%;">
-    <ul>
+
+  <div class="col-md-offset-1 col-md-4 ">
+        <h4 class="col-md-offset-1"> Movies in this category </h4>
       {% for movie in movies %}
       <ul><a href='{{url_for('showMovie', category_id = movie.category_id,
-        movie_id = movie.id)}}'> {{movie.name}} </a> </ul> <br/>
+        movie_id = movie.id)}}'> {{movie.name}} </a> </ul>
       {% endfor %}
-      <ul> <a href='{{url_for('newMovie', category_id = category_id)}}'>
-        New Movie </a> </ul> <br/>
+      <ul> <a class="btn btn-success" href='{{url_for('newMovie', category_id = category_id)}}'> New Movie </a> </ul>
 
-    </ul>
   </div>
-</body>
-
-</html>
+  </div>
+  {% endblock %}
