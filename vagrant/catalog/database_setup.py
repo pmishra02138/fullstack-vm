@@ -36,11 +36,10 @@ class Movie(Base):
         """Return object data in easily serializeable format"""
         return {
             'name': self.name,
-            'releaseDate': str(self.releaseDate),            
+            'releaseDate': str(self.releaseDate),
             'description': self.description,
             'id': self.id,
         }
-
 
 
 engine = create_engine('sqlite:///moviecatalog.db')
