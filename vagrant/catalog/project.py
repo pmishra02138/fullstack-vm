@@ -18,7 +18,7 @@ DBSession = sessionmaker(bind=engine)
 session = DBSession()
 
 
-# JSON APIs to view Restaurant Information
+# JSON APIs to view movie category information
 @app.route('/categories/JSON')
 def categoriesJSON():
     categories = session.query(Category).all()
