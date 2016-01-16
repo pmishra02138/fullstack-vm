@@ -1,10 +1,14 @@
 from flask import Flask, render_template, url_for, request, redirect, jsonify
 import datetime
 
-
 from sqlalchemy import create_engine, asc
 from sqlalchemy.orm import sessionmaker
 from database_setup import Base, Category, Movie
+
+# New imports for google authentication process
+from flask import session as login_session
+import random
+import string
 
 
 app = Flask(__name__)
@@ -16,6 +20,16 @@ Base.metadata.bind = engine
 
 DBSession = sessionmaker(bind=engine)
 session = DBSession()
+
+
+# Create anti-forgery state token
+@app.route('/login')
+def showLogin():
+    state = ''.join(random.choice(string.ascii_uppercase + string.digits)
+                    for x in xrange(32))
+    login_session['state'] = state
+    return "The current session state is %s" % login_session['state']
+    # return render_template('login.html', STATE=state)
 
 
 # JSON APIs to view movie category information
@@ -113,5 +127,6 @@ def showMovie(category_id, movie_id):
 
 
 if __name__ == '__main__':
+    app.secret_key = 'super_secret_key'
     app.debug = True
     app.run(host='0.0.0.0', port=8000)
