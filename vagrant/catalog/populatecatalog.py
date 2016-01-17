@@ -1,27 +1,41 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
-from database_setup import Base, Category, Movie
+from database_setup import Base, Category, Movie, User
 from random import randint
 import datetime
 import random
 
 
-engine = create_engine('sqlite:///moviecatalog.db')
+engine = create_engine('sqlite:///moviecatalogwithusers.db')
 Base.metadata.bind = engine
 DBSession = sessionmaker(bind=engine)
 session = DBSession()
 
+# Create Users
+# User1
+newUser = User(name = "Pankaj Mishra", email="pmishra02138@gmail.com")
+session.add(newUser)
+session.commit()
+
+# User2
+newUser = User(name = "Pankaj", email="pankaj501@hotmail.com")
+session.add(newUser)
+session.commit()
+
+# Print Users
+# for user in session.query(User):
+# 	print user.name, user.id, user.email
 
 # Add Categories
 categories = ['Action', 'Comedies', 'Dramas', 'Romance', 'Horror']
 
-for category in categories:
+for i, category in enumerate(categories):
 	new_category = Category(name = category)
 	session.add(new_category)
 	session.commit()
 
-# # Print Catalog table
+# Print Catalog table
 # for category in session.query(Category):
 # 	print category.name, category.id
 
@@ -37,15 +51,15 @@ movies = [{'name':'Surviovr', 'category':'Action', 'releaseDate':datetime.date(2
 			{'name':'Pay the Ghost', 'category':'Horror','releaseDate':datetime.date(2015, 9, 25), 'description':'Nearly a year after his 8-year-old son vanishes in the midst of a Halloween parade, Mike Cole begins having horrifying visions of the boy\'s fate. Renewing his search for the youngster, Mike realizes he\'s up against a vengeful Halloween spirit.'},
 			{'name':'Awaken', 'category':'Horror', 'releaseDate':datetime.date(2015, 7, 7), 'description':'A random group of people played by Vinnie Jones, Edward Furlong, and Daryl Hannah amongst others wake up on an Island where they are being hunted down in a sinister plot to harvest their organs.'}]
 
-for movie in movies:
+for i, movie in enumerate(movies):
 	movieCategory = session.query(Category).filter(Category.name== movie['category']).one()
 	new_movie = Movie(name = movie['name'], releaseDate = movie['releaseDate'],
-						description = movie['description'], category_id = movieCategory.id)
+						description = movie['description'], category_id = movieCategory.id, user_id=randint(1,2))
 	session.add(new_movie)
 	session.commit()
 
 # Print Movie table
-for movie in session.query(Movie):
-	print movie.name, movie.id, movie.category_id, movie.releaseDate, movie.description
+# for movie in session.query(Movie):
+# 	print movie.name, movie.id, movie.category_id, movie.user_id, movie.releaseDate, movie.description
 
 print "Successfully created Catalog database containing movies by generes!"
