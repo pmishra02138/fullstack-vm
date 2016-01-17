@@ -245,7 +245,7 @@ def editMovie(category_id, movie_id):
 @app.route('/category/<int:category_id>/movie/<int:movie_id>/delete', methods=['GET', 'POST'])
 def deleteMovie(category_id, movie_id):
     if 'username' not in login_session:
-        return redirect('/login')    
+        return redirect('/login')
     deletedMovie = session.query(Movie).filter(Movie.id == movie_id).one()
     if request.method == 'POST':
         session.delete(deletedMovie)
