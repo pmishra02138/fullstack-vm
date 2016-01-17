@@ -206,6 +206,8 @@ def showCategory(category_id):
 
 @app.route('/category/<int:category_id>/movie/new', methods=['GET', 'POST'])
 def newMovie(category_id):
+    if 'username' not in login_session:
+        return redirect('/login')
     categories = session.query(Category).all()
     if request.method == 'POST':
         dt = request.form['releaseDate']
@@ -221,6 +223,8 @@ def newMovie(category_id):
 
 @app.route('/category/<int:category_id>/movie/<int:movie_id>/edit', methods=['GET', 'POST'])
 def editMovie(category_id, movie_id):
+    if 'username' not in login_session:
+        return redirect('/login')
     categories = session.query(Category).all()
     editedMovie = session.query(Movie).filter(Movie.id == movie_id).one()
     if request.method == 'POST':
@@ -240,6 +244,8 @@ def editMovie(category_id, movie_id):
 
 @app.route('/category/<int:category_id>/movie/<int:movie_id>/delete', methods=['GET', 'POST'])
 def deleteMovie(category_id, movie_id):
+    if 'username' not in login_session:
+        return redirect('/login')    
     deletedMovie = session.query(Movie).filter(Movie.id == movie_id).one()
     if request.method == 'POST':
         session.delete(deletedMovie)
