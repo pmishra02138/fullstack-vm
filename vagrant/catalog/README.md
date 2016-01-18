@@ -8,7 +8,7 @@ User authentication is provided through Google OAuth2. Local permissions are
 maintained to allow limited access to authorized users.
 
 ## Getting Started
-* Clone a copy of [full-nanodegree-vm-repository](https://github.com/pmishra02138/fullstack-nanodegree-vm.git) to your local machine. More about file structure ca be found [here.](#File structure)
+* Clone a copy of [full-nanodegree-vm-repository](https://github.com/pmishra02138/fullstack-nanodegree-vm.git) to your local machine. More about file structure ca be found [here.](#fileStructure)
 
 * Start an instance of [vagrant and virtual machine](#vagrant) and go to the _synched folder_.
 
@@ -47,11 +47,11 @@ links.
 * A particular category (genre) can be accessed through ```/category/<int:category_id>/movie/JSON```
 * Detail of particlar movie can be accessed through ``` /category/<int:category_id>/movie/<int:movie_id>/JSON```
 
-## <a id="vagrant"/> Vagrant </a> :  
+## <a id="vagrant"/>Vagrant </a> :  
 
 Help for installing vagrant and virtual machine can be found [here.](https://www.udacity.com/wiki/ud197/install-vagrant)
 
-## File structure
+## <a id="fileStructure">File structure </a>
 
 * The code for Movie Catalog is in /vagrant/catalog folder. The folder contains
 following files:
