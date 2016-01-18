@@ -227,11 +227,6 @@ def showCategories():
 def showCategory(category_id):
     categories = session.query(Category).all()
     movies =  session.query(Movie).filter(Movie.category_id == category_id).all()
-   # if 'username' not in login_session:
-   #      return render_template('public_category.html', restaurants=restaurants)
-   #  else:
-   #      return render_template('category.html', restaurants=restaurants)
-
     return render_template('category.html', categories=categories,
                             category_id = category_id, movies=movies)
 
