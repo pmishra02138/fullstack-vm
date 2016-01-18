@@ -16,8 +16,9 @@
       <ul><a href='{{url_for('showMovie', category_id = movie.category_id,
         movie_id = movie.id)}}'> {{movie.name}} </a> </ul>
       {% endfor %}
+      {% if 'username' in session %}
       <ul> <a class="btn btn-success" href='{{url_for('newMovie', category_id = category_id)}}'> New Movie </a> </ul>
-
+			{% endif %}
   </div>
   </div>
   {% endblock %}
