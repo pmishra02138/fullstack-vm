@@ -227,8 +227,9 @@ def showCategories():
 def showCategory(category_id):
     categories = session.query(Category).all()
     movies =  session.query(Movie).filter(Movie.category_id == category_id).all()
+    category = session.query(Category).filter(Category.id == category_id).one()
     return render_template('category.html', categories=categories,
-                            category_id = category_id, movies=movies)
+                            movies=movies, thisCategory= category)
 
 
 @app.route('/category/<int:category_id>/movie/new', methods=['GET', 'POST'])

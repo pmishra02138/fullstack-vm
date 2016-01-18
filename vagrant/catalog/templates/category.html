@@ -11,13 +11,13 @@
   </div>
 
   <div class="col-md-offset-1 col-md-4 ">
-        <h4 class="col-md-offset-1"> Movies in this category </h4>
+        <h4 class="col-md-offset-1"> Movies in {{thisCategory.name}} category </h4>
       {% for movie in movies %}
       <ul><a href='{{url_for('showMovie', category_id = movie.category_id,
         movie_id = movie.id)}}'> {{movie.name}} </a> </ul>
       {% endfor %}
       {% if 'username' in session %}
-      <ul> <a class="btn btn-success" href='{{url_for('newMovie', category_id = category_id)}}'> New Movie </a> </ul>
+      <ul> <a class="btn btn-success" href='{{url_for('newMovie', category_id = thisCategory.id)}}'> New Movie </a> </ul>
 			{% endif %}
   </div>
   </div>
