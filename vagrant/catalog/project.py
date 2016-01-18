@@ -3,7 +3,7 @@ import datetime
 
 from sqlalchemy import create_engine, asc
 from sqlalchemy.orm import sessionmaker
-from database_setup import Base, Category, Movie
+from database_setup import Base, Category, Movie, User
 
 # New imports for google authentication process
 from flask import session as login_session
@@ -24,7 +24,7 @@ CLIENT_ID = json.loads(
 APPLICATION_NAME = "Movie Catalog Application"
 
 # Connect to Database and create database session
-engine = create_engine('sqlite:///moviecatalog.db')
+engine = create_engine('sqlite:///moviecatalogwithusers.db')
 Base.metadata.bind = engine
 
 DBSession = sessionmaker(bind=engine)
@@ -113,6 +113,10 @@ def gconnect():
     login_session['email'] = data['email']
 
     # See if a user exists, if it doesn't make a new one
+    user_id = getUserID(login_session['email'])
+    if not user_id:
+        user_id = createUser(login_session)
+    login_session['user_id'] = user_id
 
     output = ''
     output += '<h1>Welcome, '
@@ -124,6 +128,29 @@ def gconnect():
     flash("you are now logged in as %s" % login_session['username'])
     print "done!"
     return output
+
+
+# User Helper Functions
+
+def createUser(login_session):
+    newUser = User(name=login_session['username'], email=login_session['email'])
+    session.add(newUser)
+    session.commit()
+    user = session.query(User).filter_by(email=login_session['email']).one()
+    return user.id
+
+
+def getUserInfo(user_id):
+    user = session.query(User).filter_by(id=user_id).one()
+    return user
+
+
+def getUserID(email):
+    try:
+        user = session.query(User).filter_by(email=email).one()
+        return user.id
+    except:
+        return None
 
 
 # DISCONNECT - Revoke a current user's token and reset their login_session
@@ -200,6 +227,11 @@ def showCategories():
 def showCategory(category_id):
     categories = session.query(Category).all()
     movies =  session.query(Movie).filter(Movie.category_id == category_id).all()
+   # if 'username' not in login_session:
+   #      return render_template('public_category.html', restaurants=restaurants)
+   #  else:
+   #      return render_template('category.html', restaurants=restaurants)
+
     return render_template('category.html', categories=categories,
                             category_id = category_id, movies=movies)
 
@@ -212,7 +244,7 @@ def newMovie(category_id):
     if request.method == 'POST':
         dt = request.form['releaseDate']
         newMovie = Movie(name = request.form['name'], releaseDate = datetime.datetime.strptime(dt, "%Y-%m-%d"),
-    						description = request.form['description'], category_id = category_id)
+    						description = request.form['description'], category_id = category_id, user_id=login_session['user_id'])
         session.add(newMovie)
         session.commit()
         movies =  session.query(Movie).filter(Movie.category_id == category_id).all()
@@ -227,6 +259,9 @@ def editMovie(category_id, movie_id):
         return redirect('/login')
     categories = session.query(Category).all()
     editedMovie = session.query(Movie).filter(Movie.id == movie_id).one()
+    if login_session['user_id'] != editedMovie.user_id:
+        return "<script>function myFunction() {alert('You are not authorized to edit this movie. You can only edit movie that you have created.');}</script><body onload='myFunction()''>"
+
     if request.method == 'POST':
         if request.form['name']:
             editedMovie.name = request.form['name']
@@ -247,6 +282,9 @@ def deleteMovie(category_id, movie_id):
     if 'username' not in login_session:
         return redirect('/login')
     deletedMovie = session.query(Movie).filter(Movie.id == movie_id).one()
+    if login_session['user_id'] != deletedMovie.user_id:
+        return "<script>function myFunction() {alert('You are not authorized to delete this movie. You can only delete movie that you have created.');}</script><body onload='myFunction()''>"
+
     if request.method == 'POST':
         session.delete(deletedMovie)
         session.commit()
@@ -259,7 +297,11 @@ def deleteMovie(category_id, movie_id):
 @app.route('/category/<int:category_id>/movie/<int:movie_id>')
 def showMovie(category_id, movie_id):
     movie =  session.query(Movie).filter(Movie.category_id == category_id, Movie.id == movie_id).one()
-    return render_template('showmovie.html', movie = movie)
+    creator = getUserInfo(movie.user_id)
+    if 'username' not in login_session or creator.id != login_session['user_id']:
+        return render_template('publicshowmovie.html', movie = movie)
+    else:
+        return render_template('showmovie.html', movie = movie)
 
 
 if __name__ == '__main__':
