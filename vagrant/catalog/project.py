@@ -210,7 +210,7 @@ def movieItemJSON(category_id, movie_id):
     return jsonify(Movie_Item=Movie_Item.serialize)
 
 @app.route('/category/<int:category_id>/movie/JSON')
-def restaurantMenuJSON(category_id):
+def categoryMoviesJSON(category_id):
     items = session.query(Movie).filter_by(category_id=category_id).all()
     return jsonify(MovieItems=[i.serialize for i in items])
 
