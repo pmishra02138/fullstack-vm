@@ -1,7 +1,7 @@
 from flask import Flask, render_template, url_for, request, redirect, jsonify, flash
 import datetime
 
-from sqlalchemy import create_engine, asc
+from sqlalchemy import create_engine, desc
 from sqlalchemy.orm import sessionmaker
 from database_setup import Base, Category, Movie, User
 
@@ -219,7 +219,8 @@ def categoryMoviesJSON(category_id):
 @app.route('/categories')
 def showCategories():
     categories = session.query(Category).all()
-    movies =  session.query(Movie).order_by(asc(Movie.releaseDate)).limit(5).all()
+    movies =  session.query(Movie).order_by(desc(Movie.releaseDate)).limit(5).all()
+
     return render_template('categories.html', categories=categories, movies=movies)
 
 
