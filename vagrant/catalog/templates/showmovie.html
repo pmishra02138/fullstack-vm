@@ -6,8 +6,10 @@
 <p>{{movie['description'] }}</p>
 </div>
 <div class="col-sm-10">
+  {% if 'username' in session %}
   <a class = "btn btn-primary" href='{{url_for('editMovie', category_id = movie.category_id, movie_id = movie.id)}}'> Edit </a>
   <a class = "btn btn-danger" href='{{url_for('deleteMovie', category_id = movie.category_id, movie_id = movie.id)}}'> Delete </a>
+  {% endif %}
 </div>
 
 {% endblock %}
