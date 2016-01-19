@@ -8,7 +8,7 @@ User authentication is provided through Google OAuth2. Local permissions are
 maintained to allow limited access to authorized users.
 
 ## Getting Started
-* Clone a copy of [full-nanodegree-vm-repository](https://github.com/pmishra02138/fullstack-nanodegree-vm.git) to your local machine. More about file structure ca be found [here.](#fileStructure)
+* Clone a copy of [full-nanodegree-vm-repository](https://github.com/pmishra02138/fullstack-vm.git) to your local machine. More about file structure ca be found [here.](#fileStructure)
 
 * Start an instance of [vagrant and virtual machine](https://www.udacity.com/wiki/ud197/install-vagrant) and go to the _synched folder_.
 
@@ -23,7 +23,7 @@ maintained to allow limited access to authorized users.
   python populatecatalog.py
   ```
 
-* Start catalog web app through locslhost webserver:
+* Start catalog web app through localhost webserver:
   ```
     python project.py
   ```
