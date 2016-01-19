@@ -18,10 +18,10 @@ maintained to allow limited access to authorized users.
   cd /vagrant/catalog
   ```
 * Create and populate a database
-```
+  ```
   python database_setup.py
   python populatecatalog.py
-```
+  ```
 
 * Start catalog web app through locslhost webserver:
   ```
@@ -43,9 +43,9 @@ links.
 
 ## JSON endpoints
 
-* Complete database can be accessed through ``` /categories/JSON```
+* Entire database can be accessed through ``` /categories/JSON```
 * A particular category (genre) can be accessed through ```/category/<int:category_id>/movie/JSON```
-* Detail of particlar movie can be accessed through ``` /category/<int:category_id>/movie/<int:movie_id>/JSON```
+* Details of particular movie can be accessed through ``` /category/<int:category_id>/movie/<int:movie_id>/JSON```
 
 ## <a id="fileStructure">File structure </a>
 
@@ -55,6 +55,6 @@ following files:
   * **templates**: This **folder** HTML templates corresponding to different routes.
   * **client_secrets.json**: Client secrets for authorization through Google OAuth2.
   * **database_setup.py**: File for creating an initial database.
-  * **pupulatecatalog.pu**: File of populating the database.
+  * **pupulatecatalog.py**: File of populating the database.
   * **project.py**: This file contains server side code for launching the web
   app. This file contains the code for handling routes.          
