@@ -17,6 +17,9 @@ import json
 from flask import make_response
 import requests
 
+# For decorator
+from functools import wraps
+
 app = Flask(__name__)
 
 CLIENT_ID = json.loads(
@@ -31,8 +34,19 @@ DBSession = sessionmaker(bind=engine)
 session = DBSession()
 
 
+# Login decorator
+def login_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if 'username' in login_session:
+            return f(*args, **kwargs)
+        else:
+            return redirect(url_for('showLogin'))
+    return decorated_function
+
+
 # Create anti-forgery state token
-@app.route('/login')
+@app.route('/login', methods=['GET', 'POST'])
 def showLogin():
     state = ''.join(random.choice(string.ascii_uppercase + string.digits)
                     for x in xrange(32))
@@ -234,9 +248,8 @@ def showCategory(category_id):
 
 
 @app.route('/category/<int:category_id>/movie/new', methods=['GET', 'POST'])
+@login_required
 def newMovie(category_id):
-    if 'username' not in login_session:
-        return redirect('/login')
     categories = session.query(Category).all()
     if request.method == 'POST':
         dt = request.form['releaseDate']
@@ -251,9 +264,8 @@ def newMovie(category_id):
 
 
 @app.route('/category/<int:category_id>/movie/<int:movie_id>/edit', methods=['GET', 'POST'])
+@login_required
 def editMovie(category_id, movie_id):
-    if 'username' not in login_session:
-        return redirect('/login')
     categories = session.query(Category).all()
     editedMovie = session.query(Movie).filter(Movie.id == movie_id).one()
     if login_session['user_id'] != editedMovie.user_id:
@@ -275,9 +287,8 @@ def editMovie(category_id, movie_id):
 
 
 @app.route('/category/<int:category_id>/movie/<int:movie_id>/delete', methods=['GET', 'POST'])
+@login_required
 def deleteMovie(category_id, movie_id):
-    if 'username' not in login_session:
-        return redirect('/login')
     deletedMovie = session.query(Movie).filter(Movie.id == movie_id).one()
     if login_session['user_id'] != deletedMovie.user_id:
         return "<script>function myFunction() {alert('You are not authorized to delete this movie. You can only delete movie that you have created.');}</script><body onload='myFunction()''>"
