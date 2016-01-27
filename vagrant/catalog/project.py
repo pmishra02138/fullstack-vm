@@ -26,6 +26,9 @@ CLIENT_ID = json.loads(
     open('client_secrets.json', 'r').read())['web']['client_id']
 APPLICATION_NAME = "Movie Catalog Application"
 
+CSRF_ENABLED = True
+from forms import NewMovieForm
+
 # Connect to Database and create database session
 engine = create_engine('sqlite:///moviecatalogwithusers.db')
 Base.metadata.bind = engine
@@ -251,6 +254,7 @@ def showCategory(category_id):
 @login_required
 def newMovie(category_id):
     categories = session.query(Category).all()
+    form = NewMovieForm()
     if request.method == 'POST':
         dt = request.form['releaseDate']
         newMovie = Movie(name = request.form['name'], releaseDate = datetime.datetime.strptime(dt, "%Y-%m-%d"),
@@ -260,7 +264,7 @@ def newMovie(category_id):
         movies =  session.query(Movie).filter(Movie.category_id == category_id).all()
         return redirect(url_for('showCategory', category_id=category_id))
     else:
-        return render_template('newmovie.html', category_id=category_id)
+        return render_template('newmovie.html', category_id=category_id, form = form)
 
 
 @app.route('/category/<int:category_id>/movie/<int:movie_id>/edit', methods=['GET', 'POST'])
