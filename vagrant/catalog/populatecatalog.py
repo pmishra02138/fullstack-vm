@@ -1,7 +1,7 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
-from database_setup import Base, Category, Movie, User
+from models import Base, Category, Movie, User
 from random import randint
 import datetime
 import random

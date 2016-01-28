@@ -3,7 +3,7 @@ import datetime
 
 from sqlalchemy import create_engine, desc
 from sqlalchemy.orm import sessionmaker
-from database_setup import Base, Category, Movie, User
+from models import Base, Category, Movie, User
 
 # New imports for google authentication process
 from flask import session as login_session

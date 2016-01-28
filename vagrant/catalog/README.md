@@ -19,7 +19,7 @@ maintained to allow limited access to authorized users.
   ```
 * Create and populate a database
   ```
-  python database_setup.py
+  python models.py
   python populatecatalog.py
   ```
 
@@ -54,7 +54,7 @@ following files:
   * **static**: This **folder** contains css stylesheet.
   * **templates**: This **folder** HTML templates corresponding to different routes.
   * **client_secrets.json**: Client secrets for authorization through Google OAuth2.
-  * **database_setup.py**: File for creating an initial database.
+  * **models.py**: File for creating an initial database.
   * **pupulatecatalog.py**: File of populating the database.
   * **project.py**: This file contains server side code for launching the web
   app. This file contains the code for handling routes.          
