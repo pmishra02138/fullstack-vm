@@ -268,14 +268,17 @@ def newMovie(category_id):
                                 form = form)
 
 
-@app.route('/category/<int:category_id>/movie/<int:movie_id>/edit', methods=['GET', 'POST'])
+@app.route('/category/<int:category_id>/movie/<int:movie_id>/edit',
+            methods=['GET', 'POST'])
 @login_required
 def editMovie(category_id, movie_id):
     categories = session.query(Category).all()
     editedMovie = session.query(Movie).filter(Movie.id == movie_id).one()
     form = MovieForm()
     if login_session['user_id'] != editedMovie.user_id:
-        return "<script>function myFunction() {alert('You are not authorized to edit this movie. You can only edit movie that you have created.');}</script><body onload='myFunction()''>"
+        return "<script>function myFunction() {alert('You are not authorized \
+                to edit this movie. You can only edit movie that you have \
+                created.');}</script><body onload='myFunction()''>"
 
     if request.method == 'POST':
         if request.form['name']:
@@ -298,7 +301,9 @@ def editMovie(category_id, movie_id):
 def deleteMovie(category_id, movie_id):
     deletedMovie = session.query(Movie).filter(Movie.id == movie_id).one()
     if login_session['user_id'] != deletedMovie.user_id:
-        return "<script>function myFunction() {alert('You are not authorized to delete this movie. You can only delete movie that you have created.');}</script><body onload='myFunction()''>"
+        return "<script>function myFunction() {alert('You are not authorized \
+                to delete this movie. You can only delete movie that you have \
+                created.');}</script><body onload='myFunction()''>"
 
     if request.method == 'POST':
         session.delete(deletedMovie)
